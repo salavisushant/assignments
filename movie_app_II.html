@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input{
+            width: 400px;
+    
+        }
+   
+       #cont2{
+           margin-left: 40%;
+           margin-top: 1%;
+           width: 70%;
+           height: 200px;
+       }
+       #movies{
+           margin-left: 2%;
+       }
+     
+    </style>
+</head>
+<body>
+    <h1 style="color: navy;">Hotstar</h1>
+    <input oninput="debounce(main,1000)" type="text" id="movie" placeholder="Enter Movie Name"/>
+    <div id="cont2"></div>
+    <div id="movies"></div>
+   
+
+</body>
+</html>
+<script>
+
+    var timerId;
+
+    let movies_div = document.getElementById("movies")
+
+    async function searchMovies(movie_name){
+
+        try{
+
+        let res = await fetch(`http://www.omdbapi.com/?apikey=d806bd70&s=${movie_name}`);
+
+        var data = await res.json();
+
+        return data;
+
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    function appendMovies(movies) {
+
+        if(movies === undefined) {
+            return false;
+        }
+
+        movies_div.innerHTML = null;
+
+        movies.forEach(function(data){
+
+            let div = document.createElement('div')
+            let img = document.createElement('img')
+            img.src = data.Poster;
+            img.style.marginTop="2px"
+            img.style.width="60px"
+            let name = document.createElement('p')
+            name.innerText = data.Title;
+            let release = document.createElement('p')
+            release.innerText = data.Year;
+            let imdb = document.createElement('p')
+            imdb.innerText = data.imdbID;
+            let btn = document.createElement('button');
+            btn.innerText = "Show more info"
+ 
+            btn.onclick = function(){
+                showinfo(imdb.innerHTML)
+                
+            }
+            div.append(img, name, release, imdb, btn)
+            movies_div.append(div)
+
+          
+        });
+
+    }
+
+    let cont2 = document.getElementById('cont2')
+    async function showinfo(data){
+        console.log(data)
+        let res = await fetch(`http://www.omdbapi.com/?apikey=18e8b787&i=${data}`)
+        let d = await res.json()
+        console.log(d)
+        let img = document.createElement('img')
+            img.src = d.Poster;
+            img.style.borderRadius = "20px 0 20px 0"
+            let name = document.createElement('p')
+            name.innerText = "Title-"+d.Title;
+            name.style.fontSize="30px"
+            name.style.color="navy"
+            let box = document.createElement('p')
+            box.innerText = "Box-Office-"+d.BoxOffice;
+            let release = document.createElement('p')
+            release.innerText = "Release"+d.Released;
+            let lan = document.createElement('p')
+            lan.innerText = "Language-"+d.Language;
+            let gerne = document.createElement('p');
+            gerne.innerText = "Genre-"+d.Genre;
+            let rating = document.createElement("P")
+            rating.innerText = "Imdb-"+d.imdbRating;
+            cont2.append(img, name, box, lan, gerne, rating)
+    }
+
+    async function main(){
+
+
+        let name = document.getElementById("movie").value
+
+        if(name.length < 3) {
+            return false;
+        }
+
+        let res = await searchMovies(name);
+
+        let movies_data = res.Search;   
+
+        appendMovies(movies_data)
+
+        console.log(res);
+
+    }
+
+    function debounce (func,delay) {
+
+        if(timerId){
+            clearTimeout(timerId)
+        }
+
+        timerId =setTimeout(function(){
+            func();
+            
+        }, delay);
+    }
+</script>
