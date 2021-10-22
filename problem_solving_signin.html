@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie III</title>
+    <style>
+        #cont2{
+            margin: auto;
+        }
+    
+      
+        body {font-family: Arial, Helvetica, sans-serif;}
+        * {box-sizing: border-box;}
+
+
+        input[type=text], input[type=password],input[type=number],input[type=email] {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+        }
+
+
+        input[type=text]:focus, input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+        }
+
+        button,.a {
+        background-color: #04AA6D;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 50%;
+        opacity: 0.9;
+        }
+
+        button:hover {
+        opacity:1;
+        }
+
+        .cancelbtn {
+        padding: 14px 20px;
+        background-color: #f44336;
+        }
+
+
+        .cancelbtn, .signupbtn {
+        float: left;
+        width: 50%;
+        }
+
+
+        .container {
+        padding: 18px;
+        }
+
+
+        .modal {
+        display: none; 
+        position: fixed;
+        z-index: 1; 
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: auto; 
+        background-color: #474e5d;
+        padding-top: 50px;
+        }
+
+
+        .modal-content {
+        background-color: #fefefe; 
+        border: 1px solid #888;
+        width: 50%; 
+       
+
+        }
+
+
+        hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
+        }
+        
+
+        .close {
+        position: absolute;
+        right: 35px;
+        top: 15px;
+        font-size: 40px;
+        font-weight: bold;
+        color: #f1f1f1;
+        }
+
+        .close:hover,
+        .close:focus {
+        color: #f44336;
+        cursor: pointer;
+        }
+
+
+        .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+        }
+
+        @media screen and (max-width: 300px) {
+        .cancelbtn, .signupbtn {
+            width: 100%;
+        }
+      
+        }
+   
+    </style>
+</head>
+<body>
+   
+        <div style="background-color: green;color: white;font-size: 40px; margin-top: 5%;margin-left: 70%;" id="names"></div>
+        <button  onclick="document.getElementById('id01').style.display='block';" style="width:15%; background-color: green;color: white;">Sign Up / Log In</button>
+   
+       
+        <div id="id01" class="modal">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal"></span>
+            <form class="modal-content"onsubmit="Signup(event)" id="signup-form">
+              <div class="container">
+                <h3>Sign Up</h3>
+                <hr>
+         
+                   <label for="name"><b>Name</b></label>
+                    <input type="text" placeholder="Enter Name" id="name" name="email" required>
+
+                    <label for="email"><b>Email ID</b></label>
+                    <input type="email" placeholder="Enter Email" id="email" name="email" required>
+
+                    <label for="name"><b>User Name</b></label>
+                    <input type="text" placeholder="Enter Name" id="username" name="email" required>
+
+                    <label for="psw-repeat"><b>Mobile</b></label>
+                    <input type="number" placeholder="Mobile No." id="mobile" name="psw-repeat" required>
+
+                    <label for="name"><b>Description</b></label>
+                    <input type="text" placeholder="Description" id="description" id="username" name="email" required>
+
+                
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password"  id="password" placeholder="Enter Password" name="psw" required>
+                    
+               
+                    <a href="login.html"><button type="button" class="cancelbtn">Log In</button></a>
+                    <input class="a" type="submit"/>
+    
+            
+              </div>
+            </form>
+          </div>
+
+    </h1>
+    <div id="cont1" style="margin: auto;">
+        <input style="width: 30%;" type="text" id="search" placeholder="Search For Movie"/>
+        <button style="width: 10%;" onclick="startSearch()">Search</button>
+    </div>
+    <div style="margin-left:40%;" id="cont2">
+
+    </div>
+</body>
+</html>
+<script>
+
+
+
+
+    let cont = document.getElementById('cont2')
+    async function startSearch(){
+        let get = document.getElementById("search").value;
+        let res = await fetch(`http://www.omdbapi.com/?apikey=18e8b787&t=${get}&i`)
+        let data = await res.json()
+        console.log(data)
+        start(data)
+    }
+    
+    function start(data){
+        cont.innerHTML = null;
+        let div = document.createElement('div')
+        div.style.marginTop = "20px"
+        
+        let img = document.createElement('img')
+        img.src = data.Poster;
+        img.style.borderRadius = "30px 0px 30px 0px"
+        let name = document.createElement('p')
+        name.innerText ="Name-"+ data.Title;
+        console.log(name.innerHTML)
+        name.style.color="navy"
+        name.style.fontSize="30px"
+        let box = document.createElement('p')
+        box.innerText = "Language -"+data.Language;
+        let release = document.createElement('p')
+        release.innerText ="Release date -"+ data.Released;
+
+        let gerne = document.createElement('p');
+        gerne.innerText ="Genre-"+ data.Genre;
+        let rating = document.createElement("P")
+        rating.innerText = data.imdbRating;
+        console.log(rating.innerHTML)
+        if(rating.innerHTML > 8){
+            let btn = document.createElement('button')
+            btn.innerText = "Recommonded";
+            btn.style.color="white"
+            btn.style.marginTop = "20px"
+            btn.style.background = "green"
+            btn.style.borderRadius ="20px"
+            btn.style.width="200px"
+            btn.style.border="none"
+            div.append(img, name, box, release, gerne, rating)
+            cont.append(btn, div)
+        } else {
+            div.append(img, name, box, release, gerne, rating)
+            cont.append(div)
+        }
+        
+    }
+
+
+    function Signup(e){
+        e.preventDefault()
+
+        let form = document.getElementById("signup-form");
+
+        let user_data = {
+            name:form.name.value,
+            email:form.email.value,
+            password:form.password.value,
+            username:form.username.value,
+            mobile:form.mobile.value,
+            description:form.description.value,
+        };
+
+        user_data = JSON.stringify(user_data);
+
+        fetch("https://masai-api-mocker.herokuapp.com/auth/register",{
+
+            method:'POST',
+            body:user_data,
+
+            headers:{
+                'Content-Type':"application/json"
+            },
+        })
+        .then((res)=>{
+            return res.json()
+
+        })
+        .then((res)=>{
+            console.log(res);
+
+        })
+        .catch((err)=>{
+            console.log(err);
+
+        })
+
+    }
+
+    function Login(e){
+        e.preventDefault()
+
+        let form = document.getElementById("login-form");
+
+        let user_data = {
+            password:form.password.value,
+            username:form.username.value,
+    
+        };
+
+        let data_to_send = JSON.stringify(user_data);
+        console.log(data_to_send);
+
+        fetch("https://masai-api-mocker.herokuapp.com/auth/login",{
+
+            method:'POST',
+            body:data_to_send,
+
+            headers:{
+                'Content-Type':"application/json"
+            },
+        })
+
+        .then((res)=>{
+            return res.json()
+        })
+        .then((res)=>{
+            console.log(res);
+            fetchmyData(user_data.username,res.token)
+        })
+        .catch((err)=>{
+            console.log(err);
+        });
+
+        
+
+    }
+
+    function fetchmyData (username,token) {
+
+        fetch(`https://masai-api-mocker.herokuapp.com/user/${username}`,{
+
+            headers:{
+                'Content-Type':"application/json",
+
+                Authorization:`Bearer ${token}`,
+            },
+
+        })
+
+        .then((res)=>{
+            return res.json()
+        })
+        .then((res)=>{
+            console.log(res);
+        })
+        .catch((err)=>{
+            console.log(err);
+        });
+    }
+
+    let doc = document.getElementById('names')
+    let userData = JSON.parse(localStorage.getItem('user_data'))
+    console.log(userData.length)
+    doc.innerText = null;
+    doc.append("User-"+userData[userData.length-1])
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
